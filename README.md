@@ -43,19 +43,14 @@
 1. Перед началом установки клонируйте репозиторий с исходным кодом приложения:
 
     ``` bash
-    https://github.com/krr006/OnlineStore.git
+    git clone https://github.com/krr006/OnlineStore.git
     cd OnlineStore
 
 ### 3. Настройка базы данных
 
 #### PostgreSQL:
 
-1. Запустите `PostgreSQL` и создайте новую базу данных, таблицы создадутся автоматически при запуске приложения:
-
-    ```sql
-    CREATE DATABASE postgres;
-
-    \c postgres;
+1. Запустите `PostgreSQL`, таблицы и указанная в `application.yml` база данных создадутся автоматически при запуске приложения:
 
 2. Создайте специальную категорию для неактивных продуктов:
     ```sql
