@@ -27,6 +27,7 @@ function SignUpPage() {
             });
 
             console.log('Signup successful:', response.data);
+            localStorage.setItem('token', response.data.token);
             navigate('/products');
         } catch (error) {
             if (error.response) {
