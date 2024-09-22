@@ -9,6 +9,7 @@ import com.krr006.online_store.repository.CategoryRepository;
 import com.krr006.online_store.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -41,6 +42,7 @@ public class ProductService {
         productRepository.deleteById(id);
     }
 
+    @Transactional
     public Product updateProduct(Long id, ProductRequest productRequest) {
         var product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));

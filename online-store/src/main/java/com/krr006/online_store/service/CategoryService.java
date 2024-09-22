@@ -8,6 +8,7 @@ import com.krr006.online_store.repository.CategoryRepository;
 import com.krr006.online_store.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -21,6 +22,7 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
+    @Transactional
     public void deleteCategory(Long id) {
         var category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
@@ -38,6 +40,7 @@ public class CategoryService {
         categoryRepository.delete(category);
     }
 
+    @Transactional
     public Category updateCategory(Long id, Category updatedCategory) {
         var category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException(id));
