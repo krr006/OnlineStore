@@ -25,12 +25,18 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public JwtResponse signUp(JwtSignUpRequest request) {
+        Role role = Role.ROLE_USER;
+
+        if ("admin".equals(request.getUsername())) {
+            role = Role.ROLE_ADMIN;
+        }
+
 
         var user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.ROLE_USER)
+                .role(role)
                 .build();
 
         userService.create(user);

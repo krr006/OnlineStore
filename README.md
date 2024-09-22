@@ -36,30 +36,84 @@
 
 4. **Node.js и npm**: Установите `Node.js` версии 18 и выше.
 
-## SQL запросы для создания таблиц
+### 2. Клонирование репозитория
 
-```sql
-CREATE TABLE category (
-    id BIGINT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-);
 
-CREATE TABLE product (
-    id BIGINT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    price DECIMAL(10, 2) NOT NULL,
-    category_id BIGINT,
-    FOREIGN KEY (category_id) REFERENCES category(id)
-);
+1. Перед началом установки клонируйте репозиторий с исходным кодом приложения:
 
-CREATE TABLE users (
-    id BIGINT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    role VARCHAR(50) NOT NULL
-);
+    ``` bash
+    https://github.com/krr006/OnlineStore.git
+    cd OnlineStore
 
-CREATE TABLE roles (
-    id BIGINT PRIMARY KEY,
-    role_name VARCHAR(50) NOT NULL
-);
+### 3. Настройка базы данных
+
+#### PostgreSQL:
+
+1. Запустите `PostgreSQL` и создайте новую базу данных и таблицы, таблицы создадутся автоматически при запуске приложения:
+
+    ```sql
+    CREATE DATABASE postgres;
+
+    \c postgres;
+
+2. Создайте специальную категорию для неактивных продуктов:
+    ```sql
+    INSERT INTO category (id, name, description)
+    VALUES (0, 'INACTIVE_CATEGORY', 'This category is inactive');
+
+3. Обновите настройки подключения в `application.yaml`:
+    ```yaml
+    spring:
+      datasource:
+        url: jdbc:postgresql://localhost:5432/postgres
+        username: postgres
+        password: password
+        driver-class-name: org.postgresql.Driver
+
+### 4. Запуск бэкенда (Spring Boot)
+
+1. Перейдите в директорию `online-store`:
+    ```bash
+   cd online-store
+
+2. Соберите проект с помощью Maven:
+    ```bash
+    mvn clean package
+
+3. Запустите Spring Boot приложение:
+    ```bash
+    mvn spring-boot:run
+
+### 5. Запуск фронтенда (React)
+
+1. Перейдите в директорию `frontend-app`:
+   ```bash
+   cd frontend-app
+
+2. Установите зависимости:
+    ```bash
+    npm install
+
+3. Запустите фронтенд-приложение:
+    ```bash
+    npm start
+
+Фронтенд будет доступен по адресу `http://localhost:3000`.
+
+## Обзор функциональности
+
+1. При переходе по адресу `http://localhost:3000` будет предложено войти в систему или, если еще нет аккаунта, создать его.
+Создайте пользователя с `username` `admin`, система автоматически присвоит ему роль администратора.
+![Login page](online-store/src/main/resources/static/images/SignUp_page.png)
+
+2. Перейдите на страницу с категориями, нажав кнопку `MANAGE CATEGORIES` и создайте несколько категорий:
+![categories](online-store/src/main/resources/static/images/categories.png)
+
+3. Перейдите на страницу с продуктами, нажав кнопку `GO TO PRODUCTS` и создайте несколько продуктов, категория выбирается в выпадающем списке.
+![products](online-store/src/main/resources/static/images/products.png)
+
+4. Выполните поиск, применив различные фильтры:
+![filter1](online-store/src/main/resources/static/images/filter1.png)
+
+5. Можете также выбрать категорию при поиске:
+![filter2](online-store/src/main/resources/static/images/filter2.png)
