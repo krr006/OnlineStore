@@ -52,12 +52,7 @@
 
 1. Запустите `PostgreSQL`, таблицы и указанная в `application.yml` база данных создадутся автоматически при запуске приложения.
 
-2. Создайте специальную категорию для неактивных продуктов:
-    ```sql
-    INSERT INTO category (id, name, description)
-    VALUES (0, 'INACTIVE_CATEGORY', 'This category is inactive');
-
-3. Обновите настройки подключения в `application.yaml`:
+2. Обновите настройки подключения в `application.yaml`:
     ```yaml
     spring:
       datasource:
@@ -80,6 +75,11 @@
     ```bash
     mvn spring-boot:run
 
+4. Создайте специальную категорию для неактивных продуктов:
+    ```sql
+    INSERT INTO category (id, name, description)
+    VALUES (0, 'INACTIVE_CATEGORY', 'This category is inactive');
+
 ### 5. Запуск фронтенда (React)
 
 1. Перейдите в директорию `frontend-app`:
@@ -99,7 +99,7 @@
 ## Обзор функциональности
 
 1. При переходе по адресу `http://localhost:3000` будет предложено войти в систему или, если еще нет аккаунта, создать его.
-Создайте пользователя с `username` `admin`, система автоматически присвоит ему роль администратора:
+Создайте пользователя с username `admin`, система автоматически присвоит ему роль администратора:
 ![Login page](online-store/src/main/resources/static/images/SignUp_page.png)
 
 2. Перейдите на страницу с категориями, нажав кнопку `MANAGE CATEGORIES` и создайте несколько категорий:
