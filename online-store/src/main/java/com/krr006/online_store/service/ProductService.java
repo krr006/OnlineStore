@@ -36,8 +36,12 @@ public class ProductService {
     }
 
     public void deleteProduct(Long id){
-        var product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+//        var product = productRepository.findById(id)
+//                .orElseThrow(() -> new ProductNotFoundException(id));
+
+        if (!productRepository.existsById(id)) {
+            throw new ProductNotFoundException(id);
+        }
 
         productRepository.deleteById(id);
     }
