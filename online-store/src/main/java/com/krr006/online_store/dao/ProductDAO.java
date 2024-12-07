@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 
 @Profile("dev")
-@Repository
+@Repository("productDao")
 @RequiredArgsConstructor
 public class ProductDAO {
 
@@ -24,8 +24,6 @@ public class ProductDAO {
         Session session = getCurrentSession();
 
         try {
-            session.beginTransaction();
-
             String hql = "INSERT INTO Product (name, description, price, category, createdAt, status) " +
                     "VALUES (:name, :description, :price, :category, :createdAt, :status)";
 
@@ -39,8 +37,6 @@ public class ProductDAO {
             query.setParameter("createdAt", LocalDateTime.now());
             query.setParameter("status", Status.ACTIVE);
             product = (Product) query.uniqueResult();
-
-            session.getTransaction().commit();
 
         } catch (Exception e) {
             session.getTransaction().rollback();
