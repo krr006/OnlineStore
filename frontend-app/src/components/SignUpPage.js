@@ -1,10 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import {
-    MDBContainer,
-    MDBInput,
-} from 'mdb-react-ui-kit';
+import { signup } from '../utils/auth';
+import { MDBContainer, MDBInput } from 'mdb-react-ui-kit';
 
 function SignUpPage() {
     const [email, setEmail] = useState('');
@@ -20,26 +17,13 @@ function SignUpPage() {
                 return;
             }
 
-            const response = await axios.post('http://localhost:8080/auth/register', {
-                username,
-                email,
-                password
-            });
-
-            console.log('Signup successful:', response.data);
-            localStorage.setItem('token', response.data.token);
+            await signup(email, username, password);
             navigate('/products');
-        } catch (error) {
-            if (error.response) {
-                const errorMessage = error.response.data.message || error.response.data.error || 'Registration failed.';
-                setError(errorMessage);
-            } else {
-                setError('Registration failed.');
-            }
-            console.error('Signup failed:', error.response ? error.response.data : error.message);
+        } catch (err) {
+            console.error('Signup failed:', err);
+            setError(err.message || 'Registration failed.');
         }
     };
-
 
     return (
         <div className="d-flex justify-content-center align-items-center vh-100">
