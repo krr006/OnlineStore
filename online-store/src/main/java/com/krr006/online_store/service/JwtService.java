@@ -4,7 +4,6 @@ package com.krr006.online_store.service;
 import com.krr006.online_store.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +11,7 @@ import org.springframework.cglib.core.internal.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import java.security.Key;
+import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -53,7 +52,7 @@ public class JwtService {
         return Jwts.builder().claims(extraClaims).subject(userDetails.getUsername())
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 100000 * 60 * 24))
-                .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+                .signWith(getSigningKey())
                 .compact();
     }
 
@@ -69,12 +68,11 @@ public class JwtService {
 
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(getSigningKey()).build().parseClaimsJws(token)
-                .getBody();
+        return Jwts.parser().verifyWith(getSigningKey()).build().parseSignedClaims(token).getPayload();
     }
 
 
-    private Key getSigningKey() {
+    private SecretKey getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(jwtSigningKey);
         return Keys.hmacShaKeyFor(keyBytes);
     }
