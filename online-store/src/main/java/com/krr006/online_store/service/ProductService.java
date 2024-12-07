@@ -1,6 +1,5 @@
 package com.krr006.online_store.service;
 
-import com.krr006.online_store.dao.ProductDAO;
 import com.krr006.online_store.dto.ProductRequest;
 import com.krr006.online_store.entity.Product;
 import com.krr006.online_store.entity.Status;
@@ -12,22 +11,28 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
-
 
 @RequiredArgsConstructor
 @Service
 public class ProductService {
     private final ProductRepository productRepository;
     private final CategoryRepository categoryRepository;
-    private final ProductDAO productDAO;
 
     public Product createProduct(ProductRequest productRequest) {
 
         var category = categoryRepository.findById(productRequest.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException(productRequest.getCategoryId()));
 
-        return productDAO.createProduct(productRequest, category);
+        return productRepository.save(Product.builder()
+                .name(productRequest.getName())
+                .description(productRequest.getDescription())
+                .price(productRequest.getPrice())
+                .category(category)
+                .createdAt(LocalDateTime.now())
+                .status(Status.ACTIVE)
+                .build());
     }
 
     public void deleteProduct(Long id){
