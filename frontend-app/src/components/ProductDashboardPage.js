@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { MDBContainer, MDBInput, MDBBtn, MDBCard, MDBCardBody, MDBCardTitle, MDBCardText } from 'mdb-react-ui-kit';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 function ProductDashboardPage() {
     const [products, setProducts] = useState([]);
@@ -122,15 +123,35 @@ function ProductDashboardPage() {
         navigate('/');
     };
 
+
+    const decodeToken = () => {
+        const  token = localStorage.getItem("token");
+        if (token) {
+            return jwtDecode(token);
+        } else {
+            console.error("You are not logged in.")
+        }
+    };
+
+    const isAdmin = () => {
+        const role = decodeToken().role;
+        return (role === "ROLE_ADMIN")
+    };
+
     const goToCategories = () => {
-        navigate('/categories');
+         if (isAdmin()) {
+             navigate('/categories');
+         } else {
+             console.log("Access denied — you are not an admin");
+         }
     };
 
     return (
         <MDBContainer className="py-4">
             <h2 className="mb-4 text-center">Product Dashboard</h2>
             <MDBBtn className="mb-4" onClick={handleLogout}>Logout</MDBBtn>
-            <MDBBtn className="mb-4" onClick={goToCategories}>Manage Categories</MDBBtn>
+
+            {isAdmin() && (<MDBBtn className="mb-4" onClick={goToCategories}>Manage Categories</MDBBtn>)}
 
             <h4>Create Product</h4>
             <MDBInput wrapperClass='mb-4' label='Name' value={productData.name} onChange={(e) => setProductData({ ...productData, name: e.target.value })} />
