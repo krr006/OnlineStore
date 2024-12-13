@@ -2,6 +2,7 @@ package com.krr006.online_store.service;
 
 import com.krr006.online_store.exception.AuthenticationException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -62,6 +63,6 @@ public class AuthenticationService {
 
         var jwt = jwtService.generateToken(user);
 
-        return ResponseEntity.ok(new JwtResponse(jwt));
+        return new ResponseEntity<>(new JwtResponse(jwt), HttpStatus.OK);
     }
 }
