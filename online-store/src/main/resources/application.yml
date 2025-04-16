@@ -4,7 +4,7 @@ jwt:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/online-store
+    url: jdbc:postgresql://postgres-service:5432/online-store
     username: postgres
     password: password
     driver-class-name: org.postgresql.Driver
